@@ -38,4 +38,20 @@ class AuthController extends Controller
             return HttpHelpers::responseError($th->getMessage());
         }
     }
+
+    /**
+     * Sign out everywhere and delete the token in the database.
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signOut(Request $request)
+    {
+        try {
+            $request->user()->tokens()->delete();
+
+            return HttpHelpers::responseJson('Tokens revoked successfully.');
+        } catch (\Throwable $th) {
+            return HttpHelpers::responseError($th->getMessage());
+        }
+    }
 }
