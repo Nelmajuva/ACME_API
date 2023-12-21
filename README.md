@@ -35,7 +35,7 @@ Si nos devuelve una respuesta, es porqué ya tenemos instalado la herramienta qu
 1. Clona el repositorio:
 
 ```bash
-$ git remote add origin https://github.com/Nelmajuva/ACME.git
+$ git remote add origin https://github.com/Nelmajuva/ACME_API.git
 ```
 
 2. Instala las dependencias:
