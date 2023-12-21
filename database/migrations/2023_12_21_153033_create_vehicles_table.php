@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
             $table->string('plate', 8)->unique();
-            $table->integer('motor_of_vehicle_id');
-            $table->integer('type_of_vehicle_id');
+            $table->unsignedInteger('motor_of_vehicle_id');
+            $table->unsignedInteger('type_of_vehicle_id');
             $table->uuid('driver_uuid');
             $table->uuid('owner_uuid');
             $table->timestamps();
