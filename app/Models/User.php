@@ -22,6 +22,13 @@ class User extends Authenticatable
     public $incrementing = false;
 
     /**
+     * Indicates name of the table.
+     * 
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
      * The primary key associated with the model.
      *
      * @var string

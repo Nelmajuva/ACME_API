@@ -23,7 +23,6 @@ class TypeOfAccountSeeder extends Seeder
         $typesOfAccountsToCreate = array_map(function ($typeOfAccount) use ($currentTimestamp) {
             return [
                 "name" => $typeOfAccount["name"],
-                "status" => true,
                 "created_at" => $currentTimestamp,
                 "updated_at" => $currentTimestamp,
             ];
