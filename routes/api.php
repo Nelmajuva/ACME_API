@@ -3,6 +3,12 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CitiesController;
+use App\Http\Controllers\Api\AccountsController;
+use App\Http\Controllers\Api\MotorsOfVehiclesController;
+use App\Http\Controllers\Api\TypesOfAccountsController;
+use App\Http\Controllers\Api\TypesOfVehiclesController;
+use App\Http\Controllers\Api\VehiclesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +26,10 @@ Route::prefix('auth')->group(function () {
         Route::post('sign-in-with-email-and-password', 'signInWithEmailAndPassword');
     });
 });
+
+Route::apiResource('accounts', AccountsController::class);
+Route::apiResource('cities', CitiesController::class);
+Route::apiResource('motors-of-vehicles', MotorsOfVehiclesController::class);
+Route::apiResource('types-of-accounts', TypesOfAccountsController::class);
+Route::apiResource('types-of-vehicles', TypesOfVehiclesController::class);
+Route::apiResource('vehicles', VehiclesController::class);
