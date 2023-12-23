@@ -25,7 +25,7 @@ class MotorsOfVehiclesController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listMotorsOfVehicles = MotorOfVehicle::select(['*'])->paginate(8);
+            $listMotorsOfVehicles = MotorOfVehicle::select(['*'])->paginate(16);
 
             return HTTPHelpers::responseJson($listMotorsOfVehicles);
         } catch (\Throwable $th) {
@@ -42,10 +42,10 @@ class MotorsOfVehiclesController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'name' => 'required|string',
+                'name' => 'required|string|unique:motors_of_vehicles',
             ]);
 
-            $motorOfVehicle = MotorOfVehicle::create($validatedData);
+            $motorOfVehicle = MotorOfVehicle::create($validatedData + ['status' => true]);
 
             return HTTPHelpers::responseJson($motorOfVehicle);
         } catch (\Throwable $th) {
@@ -77,14 +77,14 @@ class MotorsOfVehiclesController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
+            $request->validate([
                 'name' => 'required|string',
             ]);
 
             $motorOfVehicle = MotorOfVehicle::find($id);
             if (!isset($motorOfVehicle)) return HTTPHelpers::responseError('Motor of vehicle not found.', 404);
             DB::beginTransaction();
-            $motorOfVehicle->update($validatedData);
+            $motorOfVehicle->update($request->all());
             DB::commit();
 
             return HTTPHelpers::responseJson($motorOfVehicle);

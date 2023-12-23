@@ -8,20 +8,24 @@ class HTTPHelpers
      * Response for default.
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function responseJson($message, $query = null, $bindings = null, $headers = [], $options = JSON_UNESCAPED_UNICODE)
+    public static function responseJson($message)
     {
-        if (!app()->environment('production')) {
-            return response()->json(["status" => true, 'message' => $message, 'query' => $query, 'bindings' => $bindings], 200, $headers, $options);
-        }
-        return response()->json(["status" => true, 'message' => $message], 200, $headers, $options);
+        return response()->json(["status" => true, 'message' => $message], 200);
     }
 
     /**
      * Response with custom errors.
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function responseError($message, $status = 200, $headers = [], $options = JSON_UNESCAPED_UNICODE)
+    public static function responseError($message, $status = 500)
     {
-        return response()->json(['status' => false, 'message' => $message], $status, $headers, $options);
+        /**
+         * Use system logs to save errors or use vendors 
+         * to save all critical errors.
+         * 
+         * ...
+         */
+
+        return response()->json(['status' => false, 'message' => $message, 'code' => $status], $status);
     }
 }

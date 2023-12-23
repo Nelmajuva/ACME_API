@@ -25,7 +25,7 @@ class AccountsController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listOfAccounts = Account::select(['*'])->paginate(8);
+            $listOfAccounts = Account::select(['*'])->paginate(16);
 
             return HTTPHelpers::responseJson($listOfAccounts);
         } catch (\Throwable $th) {

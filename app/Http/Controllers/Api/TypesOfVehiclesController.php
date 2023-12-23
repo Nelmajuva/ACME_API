@@ -25,7 +25,7 @@ class TypesOfVehiclesController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listTypesOfVehicles = TypeOfVehicle::select(['*'])->paginate(8);
+            $listTypesOfVehicles = TypeOfVehicle::select(['*'])->paginate(16);
 
             return HTTPHelpers::responseJson($listTypesOfVehicles);
         } catch (\Throwable $th) {
@@ -42,10 +42,10 @@ class TypesOfVehiclesController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'name' => 'required|string',
+                'name' => 'required|string|unique:types_of_vehicles',
             ]);
 
-            $listTypesOfVehicles = TypeOfVehicle::create($validatedData);
+            $listTypesOfVehicles = TypeOfVehicle::create($validatedData + ['status' => true]);
 
             return HTTPHelpers::responseJson($listTypesOfVehicles);
         } catch (\Throwable $th) {
@@ -77,14 +77,14 @@ class TypesOfVehiclesController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
+            $request->validate([
                 'name' => 'required|string',
             ]);
 
             $typeOfVehicle = TypeOfVehicle::find($id);
             if (!isset($typeOfVehicle)) return HTTPHelpers::responseError('Type of vehicle not found.', 404);
             DB::beginTransaction();
-            $typeOfVehicle->update($validatedData);
+            $typeOfVehicle->update($request->all());
             DB::commit();
 
             return HTTPHelpers::responseJson($typeOfVehicle);

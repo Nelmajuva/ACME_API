@@ -25,7 +25,7 @@ class TypesOfAccountsController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listTypesOfAccounts = TypeOfAccount::select(['*'])->paginate(8);
+            $listTypesOfAccounts = TypeOfAccount::select(['*'])->paginate(16);
 
             return HTTPHelpers::responseJson($listTypesOfAccounts);
         } catch (\Throwable $th) {

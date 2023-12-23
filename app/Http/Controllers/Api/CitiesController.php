@@ -26,7 +26,7 @@ class CitiesController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listOfCities = City::select(['*'])->paginate(8);
+            $listOfCities = City::select(['*'])->paginate(16);
 
             return HTTPHelpers::responseJson($listOfCities);
         } catch (\Throwable $th) {
@@ -43,10 +43,10 @@ class CitiesController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'name' => 'required|string',
+                'name' => 'required|string|unique:cities',
             ]);
 
-            $city = City::create($validatedData);
+            $city = City::create($validatedData + ['status' => true]);
 
             return HTTPHelpers::responseJson($city);
         } catch (\Throwable $th) {
@@ -78,14 +78,14 @@ class CitiesController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
+            $request->validate([
                 'name' => 'required|string',
             ]);
 
             $city = City::find($id);
             if (!isset($city)) return HTTPHelpers::responseError('City not found.', 404);
             DB::beginTransaction();
-            $city->update($validatedData);
+            $city->update($request->all());
             DB::commit();
 
             return HTTPHelpers::responseJson($city);
