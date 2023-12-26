@@ -11,6 +11,7 @@ class TypeOfAccountSeeder extends Seeder
     private array $listTypesOfAccounts = [
         ["name" => "Propietario"],
         ["name" => "Conductor"],
+        ["name" => "Gestor vehicular"],
     ];
 
     /**

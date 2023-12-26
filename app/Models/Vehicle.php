@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Ramsey\Uuid\Uuid;
 
 class Vehicle extends Model
@@ -49,6 +50,7 @@ class Vehicle extends Model
         'type_of_vehicle_id',
         'driver_uuid',
         'owner_uuid',
+        'color',
         'status',
     ];
 
@@ -75,5 +77,37 @@ class Vehicle extends Model
         static::creating(function ($model) {
             $model->{$model->getKeyName()} = Uuid::uuid4()->toString();
         });
+    }
+
+    /**
+     * Get the motor that owns the vehicle.
+     */
+    public function motorOfVehicle(): BelongsTo
+    {
+        return $this->belongsTo(MotorOfVehicle::class);
+    }
+
+    /**
+     * Get the type that owns the vehicle.
+     */
+    public function typeOfVehicle(): BelongsTo
+    {
+        return $this->belongsTo(TypeOfVehicle::class);
+    }
+
+    /**
+     * Get the driver that owns the vehicle.
+     */
+    public function driver(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    /**
+     * Get the owner that owns the vehicle.
+     */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
     }
 }

@@ -16,8 +16,8 @@ class StatsController extends Controller
     public function getStats()
     {
         try {
-            $totalOfOwners = Account::where('type_of_account_id', '1')->count();
-            $totalOfDrivers = Account::where('type_of_account_id', '2')->count();
+            $totalOfOwners = Account::whereIn('type_of_account_id', ['1', '3'])->count();
+            $totalOfDrivers = Account::whereIn('type_of_account_id', ['2', '3'])->count();
             $totalOfVehicles = Vehicle::count();
             $totalOfCities = City::count();
             $totalOfMotorsVehicles = MotorOfVehicle::count();

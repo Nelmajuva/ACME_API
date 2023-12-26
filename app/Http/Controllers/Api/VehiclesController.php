@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Account;
+use App\Models\MotorOfVehicle;
+use App\Models\TypeOfVehicle;
 use App\Utilities\HTTPHelpers;
 use App\Models\Vehicle;
 
@@ -18,6 +21,31 @@ class VehiclesController extends Controller
     }
 
     /**
+     * Get all the information need to create 
+     * or edit a vehicle.
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getResources(): JsonResponse
+    {
+        try {
+            $listOfOwners = Account::select(['*'])->whereIn('type_of_account_id', ['1', '3'])->where('status', true)->get();
+            $listOfDrivers = Account::select(['*'])->whereIn('type_of_account_id', ['2', '3'])->where('status', true)->get();
+            $listMotorsOfVehicles = MotorOfVehicle::select(['*'])->where('status', true)->get();
+            $listTypesOfVehicles = TypeOfVehicle::select(['*'])->where('status', true)->get();
+
+            return HTTPHelpers::responseJson([
+                'owners' => $listOfOwners,
+                'drivers' => $listOfDrivers,
+                'motors_of_vehicles' => $listMotorsOfVehicles,
+                'types_of_vehicles' => $listTypesOfVehicles,
+            ]);
+        } catch (\Throwable $th) {
+            return HTTPHelpers::responseError($th->getMessage());
+        }
+    }
+
+    /**
      * Display a listing of the resource.
      * 
      * @return \Illuminate\Http\JsonResponse
@@ -25,7 +53,7 @@ class VehiclesController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listOfVehicles = Vehicle::select(['*'])->paginate(32);
+            $listOfVehicles = Vehicle::select(['*'])->with('motorOfVehicle')->with('typeOfVehicle')->with('driver')->with('owner')->paginate(32);
 
             return HTTPHelpers::responseJson($listOfVehicles);
         } catch (\Throwable $th) {
@@ -47,9 +75,10 @@ class VehiclesController extends Controller
                 'type_of_vehicle_id' => 'required',
                 'driver_uuid' => 'required',
                 'owner_uuid' => 'required',
+                'color' => 'required',
             ]);
 
-            $listOfVehicles = Vehicle::create($validatedData);
+            $listOfVehicles = Vehicle::create($validatedData + ['status' => true]);
 
             return HTTPHelpers::responseJson($listOfVehicles);
         } catch (\Throwable $th) {
@@ -65,7 +94,7 @@ class VehiclesController extends Controller
     public function show(string $id): JsonResponse
     {
         try {
-            $vehicle = Vehicle::find($id);
+            $vehicle = Vehicle::where('uuid', $id)->with('motorOfVehicle')->with('typeOfVehicle')->with('driver')->with('driver.city')->with('owner')->with('owner.city')->first();
 
             return HTTPHelpers::responseJson($vehicle);
         } catch (\Throwable $th) {
@@ -81,18 +110,19 @@ class VehiclesController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
+            $request->validate([
                 'plate' => 'required|string',
                 'motor_of_vehicle_id' => 'required',
                 'type_of_vehicle_id' => 'required',
                 'driver_uuid' => 'required',
                 'owner_uuid' => 'required',
+                'color' => 'required',
             ]);
 
             $vehicle = Vehicle::find($id);
             if (!isset($vehicle)) return HTTPHelpers::responseError('Vehicle not found.', 404);
             DB::beginTransaction();
-            $vehicle->update($validatedData);
+            $vehicle->update($request->all());
             DB::commit();
 
             return HTTPHelpers::responseJson($vehicle);
