@@ -14,14 +14,17 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
             $table->integer('type_of_account_id');
-            $table->integer('city_id');
+            $table->unsignedInteger('city_id');
             $table->string('document', 12);
             $table->string('first_name', 32);
-            $table->string('second_name', 32);
+            $table->string('second_name', 32)->nullable();
             $table->string('surnames', 48);
+            $table->string('address', 64);
             $table->string('phone_number', 16);
             $table->timestamps();
             $table->boolean('status');
+
+            $table->foreign('city_id')->references('id')->on('cities');
         });
     }
 

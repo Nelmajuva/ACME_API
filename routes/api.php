@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\MotorsOfVehiclesController;
 use App\Http\Controllers\Api\TypesOfAccountsController;
 use App\Http\Controllers\Api\TypesOfVehiclesController;
 use App\Http\Controllers\Api\VehiclesController;
+use App\Http\Controllers\Api\StatsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,13 @@ use App\Http\Controllers\Api\VehiclesController;
 Route::prefix('auth')->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::post('sign-in-with-email-and-password', 'signInWithEmailAndPassword');
+        Route::post('sign-out', 'signOut');
+    });
+});
+
+Route::prefix('stats')->group(function () {
+    Route::controller(StatsController::class)->group(function () {
+        Route::get('', 'getStats');
     });
 });
 

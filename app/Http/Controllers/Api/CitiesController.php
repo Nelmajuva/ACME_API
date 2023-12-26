@@ -26,7 +26,7 @@ class CitiesController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listOfCities = City::select(['*'])->paginate(16);
+            $listOfCities = City::select(['*'])->paginate(32);
 
             return HTTPHelpers::responseJson($listOfCities);
         } catch (\Throwable $th) {

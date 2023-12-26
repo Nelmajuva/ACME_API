@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Ramsey\Uuid\Uuid;
 
 class Account extends Model
@@ -16,6 +17,13 @@ class Account extends Model
      * @var bool
      */
     public $incrementing = false;
+
+    /**
+     * Indicates name of the table.
+     * 
+     * @var string
+     */
+    protected $table = 'accounts';
 
     /**
      * The primary key associated with the model.
@@ -45,6 +53,7 @@ class Account extends Model
         'surnames',
         'phone_number',
         'status',
+        'address',
     ];
 
     /**
@@ -70,5 +79,21 @@ class Account extends Model
         static::creating(function ($model) {
             $model->{$model->getKeyName()} = Uuid::uuid4()->toString();
         });
+    }
+
+    /**
+     * Get the type of account that owns the account.
+     */
+    public function typeOfAccount(): BelongsTo
+    {
+        return $this->belongsTo(TypeOfAccount::class);
+    }
+
+    /**
+     * Get the city that owns the account.
+     */
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 }

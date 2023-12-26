@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['signInWithEmailAndPassword']);
+    }
+
     /**
      * Sign in to delete all existing user tokens and return a new token.
      * 

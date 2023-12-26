@@ -25,7 +25,7 @@ class TypesOfVehiclesController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listTypesOfVehicles = TypeOfVehicle::select(['*'])->paginate(16);
+            $listTypesOfVehicles = TypeOfVehicle::select(['*'])->paginate(32);
 
             return HTTPHelpers::responseJson($listTypesOfVehicles);
         } catch (\Throwable $th) {

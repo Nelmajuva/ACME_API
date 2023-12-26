@@ -25,7 +25,7 @@ class AccountsController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listOfAccounts = Account::select(['*'])->paginate(16);
+            $listOfAccounts = Account::select(['*'])->with('typeOfAccount')->with('city')->paginate(32);
 
             return HTTPHelpers::responseJson($listOfAccounts);
         } catch (\Throwable $th) {
@@ -44,14 +44,15 @@ class AccountsController extends Controller
             $validatedData = $request->validate([
                 'type_of_account_id' => 'required',
                 'city_id' => 'required',
-                'document' => 'required|string|unique:users',
+                'document' => 'required|unique:accounts',
                 'first_name' => 'required|string',
-                'second_name' => 'required|string',
+                'second_name' => 'string|nullable',
                 'surnames' => 'required|string',
-                'phone_number' => 'required|string',
+                'phone_number' => 'required',
+                'address' => 'required',
             ]);
 
-            $account = Account::create($validatedData);
+            $account = Account::create($validatedData + ['status' => true]);
 
             return HTTPHelpers::responseJson($account);
         } catch (\Throwable $th) {
@@ -67,7 +68,7 @@ class AccountsController extends Controller
     public function show(string $id): JsonResponse
     {
         try {
-            $account = Account::find($id);
+            $account = Account::where('uuid', $id)->with('typeOfAccount')->with('city')->first();
 
             return HTTPHelpers::responseJson($account);
         } catch (\Throwable $th) {
@@ -83,20 +84,21 @@ class AccountsController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
+            $request->validate([
                 'type_of_account_id' => 'required',
                 'city_id' => 'required',
-                'document' => 'required|string|unique:users',
+                'document' => 'required',
                 'first_name' => 'required|string',
-                'second_name' => 'required|string',
+                'second_name' => 'nullable|string',
                 'surnames' => 'required|string',
-                'phone_number' => 'required|string',
+                'phone_number' => 'required',
+                'address' => 'required',
             ]);
 
             $account = Account::find($id);
             if (!isset($account)) return HTTPHelpers::responseError('Account not found.', 404);
             DB::beginTransaction();
-            $account->update($validatedData);
+            $account->update($request->all());
             DB::commit();
 
             return HTTPHelpers::responseJson($account);
