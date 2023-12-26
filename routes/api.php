@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CitiesController;
 use App\Http\Controllers\Api\AccountsController;
+use App\Http\Controllers\Api\BrandsOfVehiclesController;
 use App\Http\Controllers\Api\MotorsOfVehiclesController;
+use App\Http\Controllers\Api\Reports\VehiclesReport;
 use App\Http\Controllers\Api\TypesOfAccountsController;
 use App\Http\Controllers\Api\TypesOfVehiclesController;
 use App\Http\Controllers\Api\VehiclesController;
@@ -38,6 +40,7 @@ Route::prefix('stats')->group(function () {
 Route::prefix('vehicles')->group(function () {
     Route::controller(VehiclesController::class)->group(function () {
         Route::get('resources', 'getResources');
+        Route::post('report', [VehiclesReport::class, 'generatePDF']);
     });
 });
 
@@ -47,3 +50,4 @@ Route::apiResource('motors-of-vehicles', MotorsOfVehiclesController::class);
 Route::apiResource('types-of-accounts', TypesOfAccountsController::class);
 Route::apiResource('types-of-vehicles', TypesOfVehiclesController::class);
 Route::apiResource('vehicles', VehiclesController::class);
+Route::apiResource('brands-of-vehicles', BrandsOfVehiclesController::class);

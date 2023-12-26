@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('color', 12);
             $table->unsignedInteger('motor_of_vehicle_id');
             $table->unsignedInteger('type_of_vehicle_id');
+            $table->unsignedInteger('brand_of_vehicle_id');
             $table->uuid('driver_uuid');
             $table->uuid('owner_uuid');
             $table->timestamps();
@@ -24,6 +25,7 @@ return new class extends Migration
 
             $table->foreign('motor_of_vehicle_id')->references('id')->on('motors_of_vehicles');
             $table->foreign('type_of_vehicle_id')->references('id')->on('types_of_vehicles');
+            $table->foreign('brand_of_vehicle_id')->references('id')->on('brands_of_vehicles');
         });
     }
 

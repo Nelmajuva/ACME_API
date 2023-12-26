@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account;
+use App\Models\BrandOfVehicle;
 use App\Models\MotorOfVehicle;
 use App\Models\TypeOfVehicle;
 use App\Utilities\HTTPHelpers;
@@ -33,12 +34,14 @@ class VehiclesController extends Controller
             $listOfDrivers = Account::select(['*'])->whereIn('type_of_account_id', ['2', '3'])->where('status', true)->get();
             $listMotorsOfVehicles = MotorOfVehicle::select(['*'])->where('status', true)->get();
             $listTypesOfVehicles = TypeOfVehicle::select(['*'])->where('status', true)->get();
+            $listBrandsOfVehicles = BrandOfVehicle::select(['*'])->where('status', true)->get();
 
             return HTTPHelpers::responseJson([
                 'owners' => $listOfOwners,
                 'drivers' => $listOfDrivers,
                 'motors_of_vehicles' => $listMotorsOfVehicles,
                 'types_of_vehicles' => $listTypesOfVehicles,
+                'brands_of_vehicles' => $listBrandsOfVehicles,
             ]);
         } catch (\Throwable $th) {
             return HTTPHelpers::responseError($th->getMessage());
@@ -53,7 +56,7 @@ class VehiclesController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $listOfVehicles = Vehicle::select(['*'])->with('motorOfVehicle')->with('typeOfVehicle')->with('driver')->with('owner')->paginate(32);
+            $listOfVehicles = Vehicle::select(['*'])->with('brandOfVehicle')->with('motorOfVehicle')->with('typeOfVehicle')->with('driver')->with('owner')->paginate(32);
 
             return HTTPHelpers::responseJson($listOfVehicles);
         } catch (\Throwable $th) {
@@ -73,6 +76,7 @@ class VehiclesController extends Controller
                 'plate' => 'required|string',
                 'motor_of_vehicle_id' => 'required',
                 'type_of_vehicle_id' => 'required',
+                'brand_of_vehicle_id' => 'required',
                 'driver_uuid' => 'required',
                 'owner_uuid' => 'required',
                 'color' => 'required',
@@ -94,7 +98,7 @@ class VehiclesController extends Controller
     public function show(string $id): JsonResponse
     {
         try {
-            $vehicle = Vehicle::where('uuid', $id)->with('motorOfVehicle')->with('typeOfVehicle')->with('driver')->with('driver.city')->with('owner')->with('owner.city')->first();
+            $vehicle = Vehicle::where('uuid', $id)->with('brandOfVehicle')->with('motorOfVehicle')->with('typeOfVehicle')->with('driver')->with('driver.city')->with('owner')->with('owner.city')->first();
 
             return HTTPHelpers::responseJson($vehicle);
         } catch (\Throwable $th) {
@@ -114,6 +118,7 @@ class VehiclesController extends Controller
                 'plate' => 'required|string',
                 'motor_of_vehicle_id' => 'required',
                 'type_of_vehicle_id' => 'required',
+                'brand_of_vehicle_id' => 'required',
                 'driver_uuid' => 'required',
                 'owner_uuid' => 'required',
                 'color' => 'required',

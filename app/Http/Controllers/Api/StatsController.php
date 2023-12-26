@@ -21,6 +21,7 @@ class StatsController extends Controller
             $totalOfVehicles = Vehicle::count();
             $totalOfCities = City::count();
             $totalOfMotorsVehicles = MotorOfVehicle::count();
+            $totalOfBrandsVehicles = MotorOfVehicle::count();
             $totalOfTypesVehicles = TypeOfVehicle::count();
             $totalOfUsers = User::count();
 
@@ -31,6 +32,7 @@ class StatsController extends Controller
                 'cities' => $totalOfCities,
                 'motors_vehicles' => $totalOfMotorsVehicles,
                 'types_vehicles' => $totalOfTypesVehicles,
+                'brands_vehicles' => $totalOfBrandsVehicles,
                 'users' => $totalOfUsers,
             ]);
         } catch (\Throwable $th) {

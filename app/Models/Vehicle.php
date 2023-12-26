@@ -48,6 +48,7 @@ class Vehicle extends Model
         'plate',
         'motor_of_vehicle_id',
         'type_of_vehicle_id',
+        'brand_of_vehicle_id',
         'driver_uuid',
         'owner_uuid',
         'color',
@@ -93,6 +94,14 @@ class Vehicle extends Model
     public function typeOfVehicle(): BelongsTo
     {
         return $this->belongsTo(TypeOfVehicle::class);
+    }
+
+    /**
+     * Get the brand that owns the vehicle.
+     */
+    public function brandOfVehicle(): BelongsTo
+    {
+        return $this->belongsTo(BrandOfVehicle::class);
     }
 
     /**

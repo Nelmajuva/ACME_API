@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class MotorOfVehicle extends Model
+class BrandOfVehicle extends Model
 {
     use HasFactory;
 
@@ -22,7 +21,7 @@ class MotorOfVehicle extends Model
      * 
      * @var string
      */
-    protected $table = 'motors_of_vehicles';
+    protected $table = 'brands_of_vehicles';
 
     /**
      * The primary key associated with the table.
@@ -54,12 +53,4 @@ class MotorOfVehicle extends Model
      * @var array<string, string>
      */
     protected $casts = [];
-
-    /**
-     * Get the motor that owns the vehicle.
-     */
-    public function vehicles(): HasMany
-    {
-        return $this->hasMany(Vehicle::class);
-    }
 }

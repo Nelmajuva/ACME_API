@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             MotorOfVehicleSeeder::class,
             TypeOfAccountSeeder::class,
             TypeOfVehicleSeeder::class,
+            BrandOfVehicleSeeder::class,
         ]);
     }
 }
