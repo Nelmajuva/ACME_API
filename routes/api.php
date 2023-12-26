@@ -45,6 +45,12 @@ Route::prefix('vehicles')->group(function () {
     });
 });
 
+Route::prefix('accounts')->group(function () {
+    Route::controller(AccountsController::class)->group(function () {
+        Route::get('resources', 'getResources');
+    });
+});
+
 Route::apiResource('accounts', AccountsController::class);
 Route::apiResource('cities', CitiesController::class);
 Route::apiResource('motors-of-vehicles', MotorsOfVehiclesController::class);

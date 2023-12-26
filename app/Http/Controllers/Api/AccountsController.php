@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\Account;
 use App\Utilities\HTTPHelpers;
 use App\Http\Controllers\Controller;
-
+use App\Models\City;
+use App\Models\TypeOfAccount;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,27 @@ class AccountsController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
+    }
+
+    /**
+     * Get all the information need to create 
+     * or edit a account.
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getResources(): JsonResponse
+    {
+        try {
+            $listOfCities = City::select(['*'])->where('status', true)->get();
+            $listTypesOfAccounts = TypeOfAccount::select(['*'])->get();
+
+            return HTTPHelpers::responseJson([
+                'cities' => $listOfCities,
+                'types_of_accounts' => $listTypesOfAccounts,
+            ]);
+        } catch (\Throwable $th) {
+            return HTTPHelpers::responseError($th->getMessage());
+        }
     }
 
     /**
