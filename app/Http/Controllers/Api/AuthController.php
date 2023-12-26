@@ -45,6 +45,24 @@ class AuthController extends Controller
     }
 
     /**
+     * Return user logged.
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $user->tokens()->delete();
+            $accessToken = $user->createToken('TokenACME')->plainTextToken;
+
+            return HttpHelpers::responseJson(['user' => $user, 'access_token' => $accessToken]);
+        } catch (\Throwable $th) {
+            return HttpHelpers::responseError($th->getMessage());
+        }
+    }
+
+    /**
      * Sign out everywhere and delete the token in the database.
      * 
      * @return \Illuminate\Http\JsonResponse

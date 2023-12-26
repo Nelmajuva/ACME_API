@@ -28,6 +28,7 @@ Route::prefix('auth')->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::post('sign-in-with-email-and-password', 'signInWithEmailAndPassword');
         Route::get('sign-out', 'signOut');
+        Route::get('me', 'me');
     });
 });
 

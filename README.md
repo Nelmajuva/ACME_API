@@ -35,7 +35,7 @@ Si nos devuelve una respuesta, es porqué ya tenemos instalado la herramienta qu
 1. Clona el repositorio:
 
 ```bash
-$ git remote add origin https://github.com/Nelmajuva/ACME_API.git
+$ git clone https://github.com/Nelmajuva/ACME_WEB.git
 ```
 
 2. Instala las dependencias:
@@ -44,7 +44,7 @@ $ git remote add origin https://github.com/Nelmajuva/ACME_API.git
 $ composer install
 ```
 
-3. Crea una copia del archivo de configuración `.env`:
+3. Crea una copia del archivo de configuración `.env.example`:
 
 ```bash
 $ cp .env.example .env
